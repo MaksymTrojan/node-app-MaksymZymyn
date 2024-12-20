@@ -1,15 +1,9 @@
-name: PR-Push Workflow
+name: Push Workflow
 
 on:
   push:
     branches:
       - main  # Trigger the workflow on push to the main branch
-  pull_request:
-    branches:
-      - develop
-    types:
-      - opened
-      - synchronize  # Trigger when the PR is opened or synchronized
   workflow_dispatch:  # Allow manual triggering of the workflow
 
 jobs:
@@ -32,23 +26,23 @@ jobs:
       run: |
         npm install
 
-    # Step 4: Run the server in the background using npm start
+    # Step 4: Create the project build
+    - name: Build the project
+      run: |
+        npm run build  # Assuming a "build" script is defined in package.json (adjust if necessary)
+
+    # Step 5: Run the server in the background using npm start
     - name: Start the server in the background
       run: |
         nohup npm start -- --p 5000 --cp 3000 > server.log 2>&1 &  # Run npm start in background
         echo "Server started in the background"
 
-    # Step 5: Wait for the server to start
+    # Step 6: Wait for the server to start 
     - name: Wait for the server to start
       run: |
         sleep 10  # Wait for 10 seconds to allow the server to start
 
-    # Step 6: Run unit tests (dummy step)
+    # Step 7: Run unit tests (dummy step)
     - name: Run unit tests (dummy step)
       run: |
         echo "Unit tests have been skipped for this workflow run."
-
-    # Step 7: Check if the server is running 
-    - name: Check if server is running
-      run: |
-        curl -s 'http://localhost:5000' || echo "Server not reachable"

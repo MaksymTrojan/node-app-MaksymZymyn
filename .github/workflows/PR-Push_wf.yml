@@ -51,4 +51,4 @@ jobs:
     # Step 7: Check if the server is running 
     - name: Check if server is running
       run: |
-        curl -s 'http://localhost:5000/health' || echo "Server not reachable"
+        curl -s 'http://localhost:5000' || echo "Server not reachable"
